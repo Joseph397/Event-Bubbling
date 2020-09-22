@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events bubbling</title>
+    <link rel="stylesheet" href='styles.css'>
+  </head>
+  <body>
+      <form>
+          <input type="text" name='name' class='name-input'>
+          <button id="submit">SUBMIT</button>
+        </form>
+      
+      <h2 class="todo-nr">Number of items:<b></b></h2>
+    <ul id="todo-list"></ul>
+    <!-- javascript Below ----------------------------------------->
+    <script>
+      const button = document.querySelector("#submit");
+      const todoList = document.querySelector("#todo-list");
+      const todoNr = document.querySelector(".todo-nr b"); // selects bold tag from the .todo-nr
+      const mainTitle = document.querySelector('.main-title');
+      const nameInput = document.querySelector('.name-input');
+
+      const items = todoList.children;
+
+      //  CLICK, SCROLL, RESIZING THE BROWSER
+
+      // ATTACH A EVENT LISTENER
+      button.addEventListener("click", function (e) {
+          e.preventDefault();
+          //Create element
+        const newItem = document.createElement("li");
+        // Adding class
+        newItem.classList.add("item");
+        //Adding the text
+        newItem.innerText = nameInput.value;
+        todoList.appendChild(newItem); // attach new item to parent
+        todoNr.innerText = items.length;
+        // Delete them value from the input
+        nameInput.value = "";
+        // create element and attach listener to it
+        newItem.addEventListener('click', deleteItem)
+        console.log(nameInput);
+      });
+
+      for(item of items){
+          item.addEventListener('click', deleteItem);
+      }
+
+      function deleteItem(e) {
+        //   console.log(e); // shows all properties of event
+        //   console.log(e.target);// selects specific property of event
+        e.target.remove();
+        e.stopPropagation();
+      }
+
+      todoList.addEventListener('click', function(){
+          console.log('the ul exicutes');
+          todoList.classList.toggle("fade"); // stops from bubbling up, not going to exicute any more events on ul 
+      });
+
+      
+    </script>
+  </body>
+</html>
